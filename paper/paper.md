@@ -379,7 +379,7 @@ The penalty is added to attention logits before softmax. At H15, the penalty for
 
 **Random seeds:** C4 baseline uses seed=42 (set via `random.seed()`, `torch.manual_seed()`, `torch.cuda.manual_seed_all()`). Pass 1 and Pass 2 used PyTorch defaults without explicit seed setting. We report results from the canonical runs; the 11 development iterations of Pass 1 showed consistent head recovery across all runs despite different random states.
 
-**Data:** Stock BLOOM-1b7 weights from `bigscience/bloom-1b7` on HuggingFace. C4 validation split from `allenai/c4`. Curated corpus available at [https://github.com/Palmerschallon/bloom-head-surgery](https://github.com/Palmerschallon/bloom-head-surgery). Surgical checkpoints available at [HuggingFace Hub TBD].
+**Data:** Stock BLOOM-1b7 weights from `bigscience/bloom-1b7` on HuggingFace. C4 validation split from `allenai/c4`. Curated corpus available at [https://github.com/Palmerschallon/bloom-head-surgery](https://github.com/Palmerschallon/bloom-head-surgery). Surgical checkpoints available at [https://huggingface.co/TheNexus42/bloom-1b7-head-surgery](https://huggingface.co/TheNexus42/bloom-1b7-head-surgery).
 
 **Code:** Diagnostic tool, surgical training scripts, and evaluation code available at [https://github.com/Palmerschallon/bloom-head-surgery](https://github.com/Palmerschallon/bloom-head-surgery).
 
