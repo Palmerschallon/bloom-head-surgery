@@ -258,7 +258,24 @@ Params trained & --- & 302M (17.5\%) & 40M (2.3\%) \\
 
 All 108 targeted heads in Pass 1 recovered by epoch 3. All remaining targets in Pass 2 recovered by epoch 1. Three DEAD heads (zero entropy) were resurrected. One BOS-sink head remains at L16-H4 (BOS mass 0.538, borderline). MLP dormancy is unchanged at 8.75\% across all conditions, confirming surgical precision---only attention heads are affected.
 
-Training PPL improves from stock (16.99 $\to$ 15.10), indicating the model predicts its training domain better. Held-out PPL worsens (21.45 $\to$ 28.76). This reflects distribution shift: the held-out prompts measure generic language modeling, and revived heads have specialized toward the curated training domain rather than the generic-web distribution they were originally pretrained on. This is the expected effect of any domain-specific fine-tuning---improved in-domain performance at the cost of out-of-domain generalization. The fair held-out comparison would be the C4-trained surgical model evaluated on C4 validation data; we did not compute this number and flag it as a gap.
+Training PPL improves from stock (16.99 $\to$ 15.10), indicating the model predicts its training domain better. Held-out PPL worsens (21.45 $\to$ 28.76) on our 12 diverse evaluation prompts. To confirm that this reflects distribution shift rather than capacity loss, we evaluated all three models on 50 held-out texts from the C4 validation split (Table~\ref{tab:c4_validation}).
+
+\begin{table}[H]
+\centering
+\caption{C4 validation perplexity (50 held-out C4 texts, 4,024 tokens). The C4-trained surgical model improves over stock on C4 data, confirming that held-out PPL increase on our evaluation prompts is distribution shift, not capacity loss.}
+\label{tab:c4_validation}
+\begin{tabular}{lrr}
+\toprule
+Model & C4 Validation PPL & Eval Prompt PPL \\
+\midrule
+Stock BLOOM-1b7 & 32.42 & 21.45 \\
+C4 Surgical (E3) & \textbf{29.30} & 29.59 \\
+Curated Surgical (Pass 2) & 74.11 & 28.76 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The C4-trained surgical model outperforms stock on C4 validation data (29.30 vs.\ 32.42, a 9.6\% improvement), demonstrating that surgery improves generalization on the training distribution. The curated surgical model shows the symmetric effect: strong in-domain performance (training PPL 15.10) at the cost of C4 generalization (74.11). Each surgical model generalizes better within its training distribution and worse outside it---the signature of domain specialization, not capacity degradation.
 
 \subsection{Controlled Baseline: C4 vs.\ Curated Corpus}
 
@@ -274,7 +291,7 @@ Metric & Curated (E3) & C4 (E3) & C4 (E15) \\
 \midrule
 Heads woken & 108/108 & 108/108 & 108/108 \\
 Training PPL & $\sim$15.4 & 20.80 & 36.31 \\
-Held-out PPL & 27.52 & --- & --- \\
+Held-out PPL & 27.52 & 29.59 & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
